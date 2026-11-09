@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>My File Storage</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0c1422;color:#edf4ff;font-family:system-ui,sans-serif}header{text-align:center;padding:48px 16px;background:#17263b;border-bottom:1px solid #30445f}h1{margin:0 0 8px;font-size:clamp(28px,5vw,42px)}header p,.muted{color:#a9bad0}main{max-width:850px;margin:32px auto;padding:0 16px}.top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}input{padding:12px;border:1px solid #344a66;border-radius:9px;background:#142238;color:white;width:min(320px,100%)}.file{display:flex;align-items:center;gap:15px;margin:14px 0;padding:18px;background:#17263b;border:1px solid #30445f;border-radius:13px}.ico{font-size:28px}.info{flex:1;min-width:0}.info p{margin:5px 0 0;color:#a9bad0;font-size:14px}.btn{background:#59a8ff;color:#071525;text-decoration:none;padding:11px 15px;border-radius:8px;font-weight:700;white-space:nowrap}footer{text-align:center;padding:30px;color:#8294ab}@media(max-width:520px){.file{flex-wrap:wrap}.btn{margin-left:43px}}
+</style></head><body>
+<header><h1>My File Storage</h1><p>ファイル配布・ダウンロードページ</p></header>
+<main><div class="top"><div><h2>公開ファイル一覧</h2><span class="muted" id="count">0 files</span></div><input id="q" placeholder="ファイル名・説明で検索"></div>
+<div id="list"></div><p class="muted">※ ダウンロードボタンから外部ストレージのファイルを取得できます。</p></main><footer>MY FILE STORAGE</footer>
+<script>
+/* ファイル追加時は下の配列に1件追加してください。
+例: {name:"動画.mp4",type:"動画",size:"85MB",description:"紹介動画",url:"https://drive.google.com/file/d/FILE_ID/view"}
+*/
+const files=[];
+const list=document.getElementById('list'),q=document.getElementById('q');
+function draw(){const s=q.value.toLowerCase();const rows=files.filter(f=>(f.name+' '+f.type+' '+(f.description||'')).toLowerCase().includes(s));document.getElementById('count').textContent=rows.length+' files';list.innerHTML='';if(!rows.length){list.textContent=files.length?'一致するファイルはありません。':'現在、公開ファイルはありません。';list.className='muted';return}list.className='';rows.forEach(f=>{const d=document.createElement('div');d.className='file';const i=document.createElement('div');i.className='ico';i.textContent=({'動画':'🎬','音楽':'🎵','画像':'🖼️','圧縮ファイル':'📦'}[f.type]||'📄');const info=document.createElement('div');info.className='info';const b=document.createElement('strong');b.textContent=f.name;const p=document.createElement('p');p.textContent=[f.type,f.size,f.description].filter(Boolean).join(' · ');info.append(b,p);const a=document.createElement('a');a.className='btn';a.href=f.url;a.target='_blank';a.rel='noopener noreferrer';a.textContent='ダウンロード ↗';d.append(i,info,a);list.append(d)})}q.addEventListener('input',draw);draw();
+</script></body></html>
